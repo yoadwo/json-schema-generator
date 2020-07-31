@@ -21,15 +21,14 @@ describe('infer', function () {
         });
     });
     it('should infer simple object', function () {
-        expect(infer({name: 'harttle', age: 16}, {title: 'Harttle Schema'}))
-        .to.deep.equal({
+        expect(infer({name: 'harttle', age: 16, heightInMeters: 1.67}, {title: 'Harttle Schema'})).to.deep.equal({
             $schema: 'http://json-schema.org/draft-07/schema#',
             $id: 'http://example.org/root.json#',
             definitions: {},
             type: 'object',
             title: 'Harttle Schema',
             description: '',
-            required: ['name', 'age'],
+            required: ['name', 'age', 'heightInMeters'],
             properties: {
                 name: {
                     $id: '#/properties/name',
@@ -47,6 +46,14 @@ describe('infer', function () {
                     description: '',
                     default: 0,
                     examples: [16]
+                },
+                heightInMeters: {
+                    $id: '#/properties/heightInMeters',
+                    type: 'number',
+                    title: 'A number value',
+                    description: '',
+                    default: 0,
+                    examples: [1.67]
                 }
             }
         });
@@ -73,6 +80,16 @@ describe('spec', function () {
             default: '',
             pattern: '^(.*)$',
             examples: ['harttle']
+        });
+    });
+    it('should spec number', function () {
+        expect(spec(1.67, {$id: '#/height'})).to.deep.equal({
+            $id: '#/height',
+            type: 'number',
+            title: 'A number value',
+            description: '',
+            default: 0,
+            examples: [1.67]
         });
     });
     it('should spec array', function () {
